@@ -1,0 +1,41 @@
+html {
+  height: 100%; }
+
+body {
+  height: 100%; }
+
+main {
+  margin-top: 2%;
+  margin-bottom: 3em; }
+
+h4 {
+  margin-top: 1em;
+}
+
+#display-container {
+  padding: 2em;
+  background-color: #f1e9d2;
+  border-radius: 8px;
+  box-shadow: 4px 0 5px gray, 0 4px 5px gray;
+}
+
+ul, code, samp {
+  font-size: 12px;
+}
+
+code {
+  margin-left: 1em;
+}
+
+pre {
+  background-color: #34495E;
+  color: white;
+}
+
+.badge {
+  margin-left: 5px;
+}
+
+@media (min-width: 768px) {
+  #display-container {
+    width: 768px; } }

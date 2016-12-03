@@ -1,0 +1,23 @@
+{
+  "name": "image-search-abstraction-layer",
+  "version": "1.0.0",
+  "description": "for free code camp api practice",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AsimoLoveGym/Image-Search-Abstraction-Layer.git"
+  },
+  "author": "Joey Xia",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AsimoLoveGym/Image-Search-Abstraction-Layer/issues"
+  },
+  "homepage": "https://github.com/AsimoLoveGym/Image-Search-Abstraction-Layer",
+  "dependencies": {
+    "express": "^4.14.0",
+    "express-handlebars": "^3.0.0"
+  }
+}
