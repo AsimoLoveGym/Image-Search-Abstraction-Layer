@@ -1,9 +1,29 @@
 var express = require('express');
 var request = require('request');
+var mongodb = require('mongodb');
+require('dotenv').config();
 var app = express();
 
-var apiKey = 'AIzaSyBuuWG81dtb5JNRGccoSzyhxGCvS9CymSc';
-var cx = '006996082265588999635:yfupwd2xqso';
+var apiKey = process.env.API_KEY;
+var cx = process.env.API_CX;
+
+
+// For MongoDB connection
+var MongoClient = mongodb.MongoClient;
+var url = process.env.MONGOLAB_URI;
+
+MongoClient.connect(url, function (err, db) {
+  if (err) {
+    console.log('Unable to connect to the mongoDB server. Error:', err);
+  } else {
+    console.log('Connection established to', url);
+
+    // do some work here with the database.
+
+    //Close connection
+    db.close();
+  }
+});
 
 var handlebars = require('express-handlebars').create({ defaultLayout: null });
 app.engine('handlebars', handlebars.engine);

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/AsimoLoveGym/Image-Search-Abstraction-Layer",
   "dependencies": {
+    "dotenv": "^2.0.0",
     "express": "^4.14.0",
     "express-handlebars": "^3.0.0",
     "googleapis": "^14.2.0"
