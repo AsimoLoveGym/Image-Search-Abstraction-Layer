@@ -18,8 +18,33 @@
     <!-- Bootstrap Latest compiled and minified JavaScript -->
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
 
+<!-- For google API test -->
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script>
+      function start() {
+        gapi.client.init({
+          'apiKey': 'YOUR_API_KEY',
+          'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/translate/v2/rest'],
+        }).then(function() {
+          return gapi.client.language.translations.list({
+            q: 'hello world',
+            source: 'en',
+            target: 'de',
+          });
+        }).then(function(resp) {
+          console.log(resp.result.data.translations[0].translatedText);
+        }, function(reason) {
+          console.log('Error: ' + reason.result.error.message);
+        });
+      };
+      gapi.load('client', start);
+    </script>
+
   </head>
   <body>
+    <!-- For google API test -->
+    <div id="results"></div>
+
     <main class="container">
       <div clss="row">
         <div class="center-block" id="display-container">
@@ -36,7 +61,7 @@
 
                 <h4 class="text-left">1. Image search:</h4>
                 <h5 class="text-left">- Request Example: </h5>
-                <a href="sampler" target="_blank"><code>https://url-shortcut.herokuapp.com/new/https://www.google.com</code></a><span class="badge">Sampler</span><br>
+                <a href="http://localhost:3000/api/search" target="_blank"><code>http://localhost:3000/api/search</code></a><span class="badge">Sampler</span><br>
 
 
                 <h5 class="text-left">- Response Example: </h5>
@@ -53,7 +78,7 @@
 
                 <h4 class="text-left">2. Recent search log:</h4>
                 <h5 class="text-left">- Request Example: </h5>
-                <a href="sampler" target="_blank"><code>https://url-shortcut.herokuapp.com/new/https://www.google.com</code></a><span class="badge">Sampler</span><br>
+                <a href="http://localhost:3000/api/recent" target="_blank"><code>http://localhost:3000/api/recent</code></a><span class="badge">Sampler</span><br>
 
 
                 <h5 class="text-left">- Response Example: </h5>
