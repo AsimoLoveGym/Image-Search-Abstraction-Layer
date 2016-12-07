@@ -7,23 +7,11 @@ var app = express();
 var apiKey = process.env.API_KEY;
 var cx = process.env.API_CX;
 
-
 // For MongoDB connection
 var MongoClient = mongodb.MongoClient;
-var url = process.env.MONGOLAB_URI;
+var MongoURL = process.env.MONGOLAB_URI;
 
-MongoClient.connect(url, function (err, db) {
-  if (err) {
-    console.log('Unable to connect to the mongoDB server. Error:', err);
-  } else {
-    console.log('Connection established to', url);
 
-    // do some work here with the database.
-
-    //Close connection
-    db.close();
-  }
-});
 
 var handlebars = require('express-handlebars').create({ defaultLayout: null });
 app.engine('handlebars', handlebars.engine);
@@ -45,6 +33,30 @@ app.get('/api/search?*', function (req, res) {
 
   var outPutJson = {};
   var queryTerm = req.query.q;
+
+  MongoClient.connect(MongoURL, function (err, db) {
+    if (err) {
+      console.log('Unable to connect to the mongoDB server. Error:', err);
+    } else {
+      console.log('Connection established to', MongoURL);
+    }
+
+    // do some work here with the database.
+    var collection = db.collection('recent');
+    var search = { term: queryTerm, when: Date() };
+    collection.insert(search, function (err, result) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('Inserted %d documents into the "users" collection. The documents inserted with "_id" are:', result.length, result);
+      }
+
+    //Close connection
+
+      db.close();
+    });
+  });
+
   var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + apiKey + '&cx=' + cx + '&q=' + queryTerm + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
   request(apiUrl, function (error, response, body) {
     if (!error && response.statusCode == 200) {
@@ -73,7 +85,37 @@ app.get('/api/search?*', function (req, res) {
 });
 
 app.get('/api/recent', function (req, res) {
-  res.send('Welcome to recent API');
+  var outPutJson = [];
+
+  MongoClient.connect(MongoURL, function (err, db) {
+    if (err) {
+      console.log('Unable to connect to the mongoDB server. Error:', err);
+    } else {
+      console.log('Connection established to', MongoURL);
+    }
+
+    // do some work here with the database.
+    var collection = db.collection('recent');
+    collection.find({}).toArray(function(err, documents) {
+      // console.log(documents);
+      // outPutJson = JSON.parse(documents);
+      // console.log(typeof documents);
+      // var result = JSON.stringify(documents);
+      // console.log(typeof result);
+
+      // res.send('<pre>' + result + '</pre>');
+      // documents.forEach(function(element,index){
+      //   outPutJson.push(element);
+      // });
+
+      res.json(documents);
+      db.close();
+    });
+
+    // cursor.stream().pipe(JSONStream.stringify()).pipe(res);
+    // console.log(cursorArray);
+
+  });
 });
 
 // custom 404 page
