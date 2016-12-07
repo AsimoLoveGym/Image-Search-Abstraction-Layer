@@ -11,8 +11,6 @@ var cx = process.env.API_CX;
 var MongoClient = mongodb.MongoClient;
 var MongoURL = process.env.MONGOLAB_URI;
 
-
-
 var handlebars = require('express-handlebars').create({ defaultLayout: null });
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
@@ -26,11 +24,6 @@ app.get('/', function (req, res) {
 });
 
 app.get('/api/search?*', function (req, res) {
-  // var queryObject = req.path;
-  // var queryString = queryObject.slice(5);
-  // var outPutJson = {};
-  // res.json(outPutJsapion);
-
   var outPutJson = {};
   var queryTerm = req.query.q;
 
@@ -43,7 +36,7 @@ app.get('/api/search?*', function (req, res) {
 
     // do some work here with the database.
     var collection = db.collection('recent');
-    var search = { term: queryTerm, when: Date() };
+    var search = { query: queryTerm, when: Date() };
     collection.insert(search, function (err, result) {
       if (err) {
         console.log(err);
@@ -51,7 +44,7 @@ app.get('/api/search?*', function (req, res) {
         console.log('Inserted %d documents into the "users" collection. The documents inserted with "_id" are:', result.length, result);
       }
 
-    //Close connection
+      // Close connection
 
       db.close();
     });
@@ -60,28 +53,10 @@ app.get('/api/search?*', function (req, res) {
   var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + apiKey + '&cx=' + cx + '&q=' + queryTerm + '&searchType=image' + '&fields=items(link,snippet,image/thumbnailLink,image/contextLink)';
   request(apiUrl, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      // console.log(response);
-      // console.log(body);
-      // console.log(response.body.items);
-
-      // console.log(body);
       outPutJson = JSON.parse(body);
-
-      // console.log(outPutJson)
-      // outPutJson = qs.parse(body);
-      // console.log(outPutJson.items);
-
-      // console.log(body[items]);
-      // outPutJson = JSON.stringify(body).items;
-      // res.json(outPutJson);
       res.send('<pre>' + body + '</pre>');
     }
   });
-
-  // console.log(req.query.id);
-  // console.log(queryTerm);
-
-  // res.send('Welcome to search API');
 });
 
 app.get('/api/recent', function (req, res) {
@@ -96,25 +71,10 @@ app.get('/api/recent', function (req, res) {
 
     // do some work here with the database.
     var collection = db.collection('recent');
-    collection.find({}).toArray(function(err, documents) {
-      // console.log(documents);
-      // outPutJson = JSON.parse(documents);
-      // console.log(typeof documents);
-      // var result = JSON.stringify(documents);
-      // console.log(typeof result);
-
-      // res.send('<pre>' + result + '</pre>');
-      // documents.forEach(function(element,index){
-      //   outPutJson.push(element);
-      // });
-
+    collection.find({}).toArray(function (err, documents) {
       res.json(documents);
       db.close();
     });
-
-    // cursor.stream().pipe(JSONStream.stringify()).pipe(res);
-    // console.log(cursorArray);
-
   });
 });
 
